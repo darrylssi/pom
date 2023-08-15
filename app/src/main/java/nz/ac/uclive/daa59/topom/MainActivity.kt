@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
@@ -19,9 +18,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,13 +44,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ToPomTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
                     MainScreenView()
-//                    Timer(totalTime = 25L*60L*1000L)
                 }
             }
         }
@@ -77,7 +74,6 @@ fun BottomNav(navController: NavController) {
     )
     BottomNavigation(
         backgroundColor = colorResource(id = R.color.teal_200),
-        contentColor = Color.Black
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -109,16 +105,16 @@ fun BottomNav(navController: NavController) {
 
 sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:String){
 
-    object ToDo : BottomNavItem("To Do", R.drawable.ic_launcher_background,"to_do")
-    object Timer: BottomNavItem("Timer",R.drawable.ic_launcher_background,"timer")
-    object Settings: BottomNavItem("Settings",R.drawable.ic_launcher_background,"settingd")
+    object ToDo : BottomNavItem("To Do", R.drawable.icons8_list,"to_do")
+    object Timer: BottomNavItem("Timer",R.drawable.icons8_timer,"timer")
+    object Settings: BottomNavItem("Settings",R.drawable.icons8_settings,"settingd")
 }
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
     NavHost(navController, startDestination = BottomNavItem.Timer.screen_route) {
         composable(BottomNavItem.Timer.screen_route) {
-            TimerScreen(25L*60L*1000L)
+            TimerScreen(1L*2L*1000L)
         }
         composable(BottomNavItem.ToDo.screen_route) {
             ToDoScreen()
@@ -136,7 +132,7 @@ fun TimerScreen(
     var value by remember { mutableStateOf(0f) }
     var currentTime by remember { mutableStateOf(totalTime) }
     var currentSec by remember { mutableStateOf(0L) }
-    var currentMin by remember { mutableStateOf(25L) }
+    var currentMin by remember { mutableStateOf(1L) }
     var isTimerOn by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = currentTime, key2 = isTimerOn) {
@@ -148,8 +144,10 @@ fun TimerScreen(
             currentMin = (currentTime / 1000L) / 60L
         }
     }
-    Box(
-        contentAlignment = Alignment.Center,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
     ) {
         Text(
             text = if (currentSec < 10) {
@@ -170,8 +168,7 @@ fun TimerScreen(
                     isTimerOn = !isTimerOn
                 }
             },
-            modifier = Modifier.align(Alignment.BottomCenter),
-            // change button color
+            modifier = Modifier.wrapContentSize(Alignment.Center),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = if (!isTimerOn || currentTime <= 0L) {
                     Color.Green
@@ -181,10 +178,8 @@ fun TimerScreen(
             )
         ) {
             Text(
-                // change the text of button based on values
                 text = if (isTimerOn && currentTime >= 0L) "Stop"
-                else if (!isTimerOn && currentTime >= 0L) "Start"
-                else "Restart"
+                else "Start"
             )
         }
     }
@@ -208,23 +203,3 @@ fun ToDoScreen() {
         )
     }
 }
-
-@Composable
-fun SettingsScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Home Screen",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
-    }
-}
-
