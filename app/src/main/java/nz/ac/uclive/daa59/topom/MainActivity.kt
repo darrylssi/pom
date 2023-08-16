@@ -114,7 +114,7 @@ sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:Stri
 fun NavigationGraph(navController: NavHostController, colorViewModel: ColorViewModel) {
     NavHost(navController, startDestination = BottomNavItem.Timer.screen_route) {
         composable(BottomNavItem.Timer.screen_route) {
-            TimerScreen(25L*60L*1000L)
+            TimerScreen(25L*60*1000L)
         }
         composable(BottomNavItem.ToDo.screen_route) {
             ToDoScreen()

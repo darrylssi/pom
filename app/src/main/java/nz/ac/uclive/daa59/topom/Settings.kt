@@ -35,7 +35,7 @@ fun SettingsScreen(colorViewModel: ColorViewModel) {
             .wrapContentSize(Alignment.Center)
     ) {
         ThemeComponent(colorViewModel = colorViewModel)
-        LanguageComponent()
+//        LanguageComponent()
     }
 }
 

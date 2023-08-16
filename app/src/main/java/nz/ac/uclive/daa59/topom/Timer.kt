@@ -27,7 +27,7 @@ fun TimerScreen(
     var value by remember { mutableStateOf(0f) }
     var currentTime by remember { mutableStateOf(totalTime) }
     var currentSec by remember { mutableStateOf(0L) }
-    var currentMin by remember { mutableStateOf(25L) }
+    var currentMin by remember { mutableStateOf((totalTime / 1000L) / 60L) }
     var isTimerOn by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = currentTime, key2 = isTimerOn) {
@@ -60,6 +60,9 @@ fun TimerScreen(
                     currentTime = totalTime
                     isTimerOn = true
                 } else {
+                    currentTime = totalTime
+                    currentMin = 25
+                    currentSec = 0
                     isTimerOn = !isTimerOn
                 }
             },
@@ -73,7 +76,8 @@ fun TimerScreen(
             )
         ) {
             Text(
-                text = if (isTimerOn && currentTime >= 0L) stringResource(id = R.string.stop)
+                text = if (currentTime <= 0L) stringResource(id = R.string.start)
+                else if (isTimerOn) stringResource(id = R.string.stop)
                 else stringResource(id = R.string.start)
             )
         }

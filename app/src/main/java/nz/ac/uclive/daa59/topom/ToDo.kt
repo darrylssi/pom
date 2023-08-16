@@ -20,7 +20,7 @@ fun ToDoScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
+            .background(colorResource(id = R.color.white))
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
