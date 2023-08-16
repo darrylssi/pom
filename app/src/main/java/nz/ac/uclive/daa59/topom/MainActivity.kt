@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -105,16 +106,16 @@ fun BottomNav(navController: NavController) {
 
 sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:String){
 
-    object ToDo : BottomNavItem("To Do", R.drawable.icons8_list,"to_do")
-    object Timer: BottomNavItem("Timer",R.drawable.icons8_timer,"timer")
-    object Settings: BottomNavItem("Settings",R.drawable.icons8_settings,"settingd")
+    object ToDo : BottomNavItem(R.string.to_do.toString(), R.drawable.icons8_list,"to_do")
+    object Timer: BottomNavItem(R.string.timer.toString(),R.drawable.icons8_timer,"timer")
+    object Settings: BottomNavItem(R.string.settings.toString(),R.drawable.icons8_settings,"settingd")
 }
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
     NavHost(navController, startDestination = BottomNavItem.Timer.screen_route) {
         composable(BottomNavItem.Timer.screen_route) {
-            TimerScreen(1L*2L*1000L)
+            TimerScreen(25L*60L*1000L)
         }
         composable(BottomNavItem.ToDo.screen_route) {
             ToDoScreen()
@@ -132,7 +133,7 @@ fun TimerScreen(
     var value by remember { mutableStateOf(0f) }
     var currentTime by remember { mutableStateOf(totalTime) }
     var currentSec by remember { mutableStateOf(0L) }
-    var currentMin by remember { mutableStateOf(1L) }
+    var currentMin by remember { mutableStateOf(25L) }
     var isTimerOn by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = currentTime, key2 = isTimerOn) {
@@ -178,8 +179,8 @@ fun TimerScreen(
             )
         ) {
             Text(
-                text = if (isTimerOn && currentTime >= 0L) "Stop"
-                else "Start"
+                text = if (isTimerOn && currentTime >= 0L) stringResource(id = R.string.stop)
+                else stringResource(id = R.string.start)
             )
         }
     }

@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ToPom</string>
+    <string name="stop">Ihinto</string>
+    <string name="start">Simulan</string>
+    <string name="to_do">Mga Gagawin</string>
+    <string name="timer">Orasan</string>
+    <string name="settings">Takdaan</string>
+    <string name="language">Wika</string>
+    <string name="gray">Abo</string>
+    <string name="green">Berde</string>
+    <string name="orange">Kahel</string>
+    <string name="pink">Rosas</string>
+    <string name="yellow">Dilaw</string>
+    <string name="theme_color">Kulay ng Tema</string>
+    <string name="english">Ingles</string>
+    <string name="filipino">Pilipino</string>
 </resources>

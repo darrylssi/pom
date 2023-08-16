@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -50,19 +51,25 @@ fun ThemeComponent () {
     val isSelectedItem: (String) -> Boolean = { selectedValue.value == it }
     val onChangeState: (String) -> Unit = { selectedValue.value = it }
 
-    val items = listOf("Gray", "Green", "Orange", "Pink", "Yellow")
+    val items = listOf(stringResource(id = R.string.gray),
+            stringResource(id = R.string.green),
+            stringResource(id = R.string.orange),
+            stringResource(id = R.string.pink),
+            stringResource(id = R.string.yellow))
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        Text(text = "Higlight Color:")
+        Text(text = stringResource(id = R.string.theme_color))
         items.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.selectable(
-                    selected = isSelectedItem(item),
-                    onClick = { onChangeState(item) },
-                    role = Role.RadioButton
-                ).padding(8.dp)
+                modifier = Modifier
+                    .selectable(
+                        selected = isSelectedItem(item),
+                        onClick = { onChangeState(item) },
+                        role = Role.RadioButton
+                    )
+                    .padding(8.dp)
             ) {
                 RadioButton(
                     selected = isSelectedItem(item),
@@ -77,11 +84,10 @@ fun ThemeComponent () {
     }
 }
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LanguageComponent() {
-    val listItems = arrayOf("English", "Filipino")
+    val listItems = arrayOf(stringResource(id = R.string.english), stringResource(id = R.string.filipino))
     val contextForToast = LocalContext.current.applicationContext
 
     var expanded by remember { mutableStateOf(false) }
@@ -97,7 +103,7 @@ fun LanguageComponent() {
             value = selectedItem,
             onValueChange = {},
             readOnly = true,
-            label = { Text(text = "Language") },
+            label = { Text(text = stringResource(id = R.string.language)) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded
