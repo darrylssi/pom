@@ -7,18 +7,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,8 +35,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ToPomTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     MainScreenView()
                 }
@@ -46,22 +47,29 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreenView(){
     val navController = rememberNavController()
+    val colorViewModel = viewModel<ColorViewModel>()
     Scaffold(
-        bottomBar = { BottomNav(navController = navController) }
+        bottomBar = { BottomNav(navController = navController, colorViewModel = colorViewModel) }
     ) { it
-        NavigationGraph(navController = navController)
+        NavigationGraph(navController = navController, colorViewModel = colorViewModel)
     }
 }
 
 @Composable
-fun BottomNav(navController: NavController) {
+fun BottomNav(navController: NavController, colorViewModel: ColorViewModel) {
     val items = listOf(
         BottomNavItem.Timer,
         BottomNavItem.ToDo,
         BottomNavItem.Settings
     )
     BottomNavigation(
-        backgroundColor = colorResource(id = R.color.teal_200),
+        backgroundColor = when (colorViewModel.selectedOption.value) {
+            "gray" -> colorResource(id = R.color.gray)
+            "orange" -> colorResource(id = R.color.orange)
+            "pink" -> colorResource(id = R.color.pink)
+            "yellow" -> colorResource(id = R.color.yellow)
+            else -> { colorResource(id = R.color.green) }
+        },
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -103,7 +111,7 @@ sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:Stri
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, colorViewModel: ColorViewModel) {
     NavHost(navController, startDestination = BottomNavItem.Timer.screen_route) {
         composable(BottomNavItem.Timer.screen_route) {
             TimerScreen(25L*60L*1000L)
@@ -112,7 +120,11 @@ fun NavigationGraph(navController: NavHostController) {
             ToDoScreen()
         }
         composable(BottomNavItem.Settings.screen_route) {
-            SettingsScreen()
+            SettingsScreen(colorViewModel = colorViewModel)
         }
     }
+}
+
+class ColorViewModel: ViewModel() {
+    val selectedOption = mutableStateOf("green")
 }
