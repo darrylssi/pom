@@ -35,18 +35,19 @@ fun SettingsScreen(colorViewModel: ColorViewModel) {
             .wrapContentSize(Alignment.Center)
     ) {
         ThemeComponent(colorViewModel = colorViewModel)
-//        LanguageComponent()
     }
 }
 
 @Composable
 fun ThemeComponent (colorViewModel: ColorViewModel) {
     val selectedValue = remember { mutableStateOf("") }
+    val contextForToast = LocalContext.current.applicationContext
+    val toastText = stringResource(id = R.string.color_updated);
 
     val isSelectedItem: (String) -> Boolean = { selectedValue.value == it }
     val onChangeState: (String) -> Unit = { selectedValue.value = it }
-
     val items = listOf("gray", "green", "orange", "pink", "yellow")
+
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
@@ -57,8 +58,11 @@ fun ThemeComponent (colorViewModel: ColorViewModel) {
                 modifier = Modifier
                     .selectable(
                         selected = isSelectedItem(item),
-                        onClick = { onChangeState(item)
-                            colorViewModel.selectedOption.value = item },
+                        onClick = {
+                            onChangeState(item)
+                            colorViewModel.selectedOption.value = item
+                            Toast.makeText(contextForToast, toastText, Toast.LENGTH_SHORT).show()
+                        },
                         role = Role.RadioButton
                     )
                     .padding(8.dp)
@@ -80,49 +84,4 @@ fun ThemeComponent (colorViewModel: ColorViewModel) {
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun LanguageComponent() {
-    val listItems = arrayOf(stringResource(id = R.string.english), stringResource(id = R.string.filipino))
-    val contextForToast = LocalContext.current.applicationContext
-
-    var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf(listItems[0]) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-        TextField(
-            value = selectedItem,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text(text = stringResource(id = R.string.language)) },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded
-                )
-            },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            listItems.forEach { selectedOption ->
-                DropdownMenuItem(onClick = {
-                    selectedItem = selectedOption
-                    Toast.makeText(contextForToast, selectedOption, Toast.LENGTH_SHORT).show()
-                    expanded = false
-                }) {
-                    Text(text = selectedOption)
-                }
-            }
-        }
-    }
-
 }

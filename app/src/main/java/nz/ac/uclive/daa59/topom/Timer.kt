@@ -1,5 +1,7 @@
 package nz.ac.uclive.daa59.topom
 
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
@@ -15,9 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.delay
 
 @Composable
@@ -29,6 +33,9 @@ fun TimerScreen(
     var currentSec by remember { mutableStateOf(0L) }
     var currentMin by remember { mutableStateOf((totalTime / 1000L) / 60L) }
     var isTimerOn by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java)
 
     LaunchedEffect(key1 = currentTime, key2 = isTimerOn) {
         if(currentTime > 0 && isTimerOn) {
@@ -64,6 +71,15 @@ fun TimerScreen(
                     currentMin = 25
                     currentSec = 0
                     isTimerOn = !isTimerOn
+                }
+                vibrator?.let { v ->
+                    val amplitude = 100 // Adjust the vibration strength
+                    val duration = 50 // Adjust the vibration duration
+
+                    if (v.hasVibrator()) {
+                        val vibrationEffect = VibrationEffect.createOneShot(duration.toLong(), amplitude)
+                        v.vibrate(vibrationEffect)
+                    }
                 }
             },
             modifier = Modifier.wrapContentSize(Alignment.Center),
