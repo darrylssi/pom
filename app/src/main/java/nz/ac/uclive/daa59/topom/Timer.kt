@@ -2,6 +2,7 @@ package nz.ac.uclive.daa59.topom
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,10 +44,13 @@ fun TimerScreen(
     colorViewModel: ColorViewModel
 ) {
     var currentTime by rememberSaveable { mutableStateOf(totalTime) }
-    var currentSec by rememberSaveable { mutableStateOf(0L) }
+    var currentSec by rememberSaveable { mutableStateOf((totalTime / 1000L).mod(60L)) }
     var currentMin by rememberSaveable { mutableStateOf((totalTime / 1000L) / 60L) }
     var isTimerOn by rememberSaveable { mutableStateOf(false) }
     var pomPass by rememberSaveable { mutableStateOf(0) }
+
+    val formattedMin = currentMin.toString().padStart(2, '0')
+    val formattedSec = currentSec.toString().padStart(2, '0')
     
     var size by rememberSaveable { mutableStateOf(1f) }
     val animateScale by animateFloatAsState(targetValue = size)
@@ -56,13 +61,20 @@ fun TimerScreen(
     val context = LocalContext.current
     val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java)
 
+    val mediaPlayer = MediaPlayer.create(context, R.raw.tada)
+
     LaunchedEffect(key1 = currentTime, key2 = isTimerOn) {
         if(currentTime > 0 && isTimerOn) {
-            delay(100L)
-            currentTime -= 100L
+            delay(1000L)
+            currentTime -= 1000L
             currentSec = (currentTime / 1000L).mod(60L)
             currentMin = (currentTime / 1000L) / 60L
         } else if (isTimerOn) {
+            currentTime = totalTime
+            currentMin = (totalTime / 1000L) / 60L
+            currentSec = (totalTime / 1000L).mod(60L)
+            size = 1f
+            mediaPlayer.start()
             isTimerOn = false
             pomPass ++
         }
@@ -74,11 +86,7 @@ fun TimerScreen(
     ) {
         if (isPortrait) {
             Text(
-                text = if (currentSec < 10) {
-                    "$currentMin : 0$currentSec"
-                } else {
-                    "$currentMin : $currentSec"
-                },
+                text = "$formattedMin : $formattedSec",
                 fontSize = 44.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -92,8 +100,8 @@ fun TimerScreen(
                         isTimerOn = true
                     } else {
                         currentTime = totalTime
-                        currentMin = 25
-                        currentSec = 0
+                        currentMin = (totalTime / 1000L) / 60L
+                        currentSec = (totalTime / 1000L).mod(60L)
                         isTimerOn = !isTimerOn
                     }
                     vibrator?.let { v ->
@@ -146,24 +154,21 @@ fun TimerScreen(
             ) {
                 Column() {
                     Text(
-                        text = if (currentSec < 10) {
-                            "$currentMin : 0$currentSec"
-                        } else {
-                            "$currentMin : $currentSec"
-                        },
+                        text = "$formattedMin : $formattedSec",
                         fontSize = 44.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
                     Button(
                         onClick = {
+                            size = if (isTimerOn) 1f else 1.5f
                             if(currentTime <= 0L) {
                                 currentTime = totalTime
                                 isTimerOn = true
                             } else {
                                 currentTime = totalTime
-                                currentMin = 25
-                                currentSec = 0
+                                currentMin = (totalTime / 1000L) / 60L
+                                currentSec = (totalTime / 1000L).mod(60L)
                                 isTimerOn = !isTimerOn
                             }
                             vibrator?.let { v ->
