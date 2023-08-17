@@ -18,6 +18,8 @@
     <string name="color_updated">Napalitan na ang kulay</string>
     <string name="share">Ibahagi ang tagumpay</string>
     <string name="poms">Natapos na pom: %d</string>
+    <string name="add">Idagdag</string>
+    <string name="enter_task">Ilagay ang bagong gawain</string>
     <plurals name="text_message">
         <item quantity="one">Nakatapos ako ng isang pom!</item>
         <item quantity="other">Nakatapos ako ng %d na pom!</item>

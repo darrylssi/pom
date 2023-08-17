@@ -31,7 +31,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun TimerScreen(
-    totalTime: Long
+    totalTime: Long,
+    colorViewModel: ColorViewModel
 ) {
     var currentTime by rememberSaveable { mutableStateOf(totalTime) }
     var currentSec by rememberSaveable { mutableStateOf(0L) }
@@ -91,7 +92,7 @@ fun TimerScreen(
             modifier = Modifier.wrapContentSize(Alignment.Center),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = if (!isTimerOn || currentTime <= 0L) {
-                    Color.Green
+                    getColor(colorViewModel = colorViewModel)
                 } else {
                     Color.Red
                 }
@@ -115,7 +116,7 @@ fun TimerScreen(
                       },
             enabled = pomPass > 0,
             modifier = Modifier.wrapContentSize(Alignment.Center),
-            colors = ButtonDefaults.buttonColors( Color.Green )
+            colors = ButtonDefaults.buttonColors( getColor(colorViewModel = colorViewModel) )
         ) {
             Text(
                 text = stringResource(id = R.string.share)

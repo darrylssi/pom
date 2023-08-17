@@ -1,5 +1,6 @@
 package nz.ac.uclive.daa59.topom
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -22,12 +24,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun ToDoScreen() {
+fun ToDoScreen(colorViewModel: ColorViewModel) {
     var newTask by remember { mutableStateOf(TextFieldValue()) }
     val toDoList = remember { MutableStateFlow(listOf<String>()) }
     val taskList by remember { toDoList }.collectAsState()
@@ -55,7 +58,7 @@ fun ToDoScreen() {
                     .padding(end = 16.dp),
                 textStyle = MaterialTheme.typography.body1,
                 singleLine = true,
-                placeholder = { Text(text = "Enter a new task") }
+                placeholder = { Text(text = stringResource(R.string.enter_task)) }
             )
             Button(
                 onClick = {
@@ -66,8 +69,9 @@ fun ToDoScreen() {
                         newTask = TextFieldValue()
                     }
                 },
+                colors = ButtonDefaults.buttonColors( getColor(colorViewModel = colorViewModel) )
             ) {
-                Text(text = "Add")
+                Text(text = stringResource(id = R.string.add))
             }
         }
     }

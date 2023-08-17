@@ -63,13 +63,7 @@ fun BottomNav(navController: NavController, colorViewModel: ColorViewModel) {
         BottomNavItem.Settings
     )
     BottomNavigation(
-        backgroundColor = when (colorViewModel.selectedOption.value) {
-            "gray" -> colorResource(id = R.color.gray)
-            "orange" -> colorResource(id = R.color.orange)
-            "pink" -> colorResource(id = R.color.pink)
-            "yellow" -> colorResource(id = R.color.yellow)
-            else -> { colorResource(id = R.color.green) }
-        },
+        backgroundColor = getColor(colorViewModel = colorViewModel),
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -114,10 +108,10 @@ sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:Stri
 fun NavigationGraph(navController: NavHostController, colorViewModel: ColorViewModel) {
     NavHost(navController, startDestination = BottomNavItem.Timer.screen_route) {
         composable(BottomNavItem.Timer.screen_route) {
-            TimerScreen(25L*60*1000L)
+            TimerScreen(25*60*1000L, colorViewModel)
         }
         composable(BottomNavItem.ToDo.screen_route) {
-            ToDoScreen()
+            ToDoScreen(colorViewModel)
         }
         composable(BottomNavItem.Settings.screen_route) {
             SettingsScreen(colorViewModel = colorViewModel)
@@ -127,4 +121,15 @@ fun NavigationGraph(navController: NavHostController, colorViewModel: ColorViewM
 
 class ColorViewModel: ViewModel() {
     val selectedOption = mutableStateOf("green")
+}
+
+@Composable
+fun getColor(colorViewModel: ColorViewModel) = run {
+    when (colorViewModel.selectedOption.value) {
+        "gray" -> colorResource(id = R.color.gray)
+        "orange" -> colorResource(id = R.color.orange)
+        "pink" -> colorResource(id = R.color.pink)
+        "yellow" -> colorResource(id = R.color.yellow)
+        else -> { colorResource(id = R.color.green) }
+    }
 }
