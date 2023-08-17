@@ -26,14 +26,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SettingsScreen(colorViewModel: ColorViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
+            .wrapContentSize(Alignment.TopStart)
     ) {
         ThemeComponent(colorViewModel = colorViewModel)
     }
@@ -52,7 +54,11 @@ fun ThemeComponent (colorViewModel: ColorViewModel) {
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        Text(text = stringResource(id = R.string.theme_color))
+        Text(
+            text = stringResource(id = R.string.theme_color),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+        )
         items.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,

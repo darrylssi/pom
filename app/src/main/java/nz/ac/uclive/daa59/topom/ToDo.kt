@@ -1,6 +1,5 @@
 package nz.ac.uclive.daa59.topom
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,10 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -39,12 +38,6 @@ fun ToDoScreen(colorViewModel: ColorViewModel) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        LazyColumn {
-            items(taskList) { task ->
-                TaskItem(task = task)
-            }
-        }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -60,7 +53,7 @@ fun ToDoScreen(colorViewModel: ColorViewModel) {
                     .weight(1f)
                     .padding(end = 16.dp),
                 singleLine = true,
-                placeholder = { Text(text = stringResource(R.string.enter_task)) }
+                placeholder = { Text(text = stringResource(R.string.enter_task))},
             )
             Button(
                 onClick = {
@@ -74,6 +67,11 @@ fun ToDoScreen(colorViewModel: ColorViewModel) {
                 colors = ButtonDefaults.buttonColors( getColor(colorViewModel = colorViewModel) )
             ) {
                 Text(text = stringResource(id = R.string.add))
+            }
+        }
+        LazyColumn {
+            items(taskList) { task ->
+                TaskItem(task = task)
             }
         }
     }
