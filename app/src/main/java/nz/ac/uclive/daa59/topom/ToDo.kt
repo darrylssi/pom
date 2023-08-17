@@ -16,6 +16,7 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,12 +52,13 @@ fun ToDoScreen(colorViewModel: ColorViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
+                colors = TextFieldDefaults.textFieldColors(cursorColor = getColor(colorViewModel = colorViewModel), focusedIndicatorColor = getColor(
+                    colorViewModel = colorViewModel)),
                 value = newTask,
                 onValueChange = { newTask = it },
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 16.dp),
-                textStyle = MaterialTheme.typography.body1,
                 singleLine = true,
                 placeholder = { Text(text = stringResource(R.string.enter_task)) }
             )
@@ -92,6 +94,6 @@ fun TaskItem(task: String) {
             onCheckedChange = { isCompleted = it }
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = task, style = MaterialTheme.typography.body1)
+        Text(text = task)
     }
 }

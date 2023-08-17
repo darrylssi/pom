@@ -5,6 +5,9 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +46,9 @@ fun TimerScreen(
     var currentMin by rememberSaveable { mutableStateOf((totalTime / 1000L) / 60L) }
     var isTimerOn by rememberSaveable { mutableStateOf(false) }
     var pomPass by rememberSaveable { mutableStateOf(0) }
+    
+    var size by rememberSaveable { mutableStateOf(1f) }
+    val animateScale by animateFloatAsState(targetValue = size)
 
     val configuration = LocalConfiguration.current
     val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
@@ -74,10 +81,12 @@ fun TimerScreen(
                 },
                 fontSize = 44.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.scale(scale = animateScale)
             )
             Button(
                 onClick = {
+                    size = if (isTimerOn) 1f else 1.5f
                     if(currentTime <= 0L) {
                         currentTime = totalTime
                         isTimerOn = true

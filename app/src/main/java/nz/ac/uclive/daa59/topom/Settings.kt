@@ -41,7 +41,7 @@ fun SettingsScreen(colorViewModel: ColorViewModel) {
 
 @Composable
 fun ThemeComponent (colorViewModel: ColorViewModel) {
-    val selectedValue = rememberSaveable { mutableStateOf("") }
+    val selectedValue = rememberSaveable { mutableStateOf("green") }
     val contextForToast = LocalContext.current.applicationContext
     val toastText = stringResource(id = R.string.color_updated);
 
