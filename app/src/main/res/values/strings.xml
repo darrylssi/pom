@@ -15,4 +15,10 @@
     <string name="english">English</string>
     <string name="filipino">Filipino</string>
     <string name="color_updated">Color updated</string>
+    <string name="share">Share achievement</string>
+    <string name="poms">Finished poms: %d</string>
+    <plurals name="text_message">
+        <item quantity="one">I have completed a pom!</item>
+        <item quantity="other">I have completed %d poms!</item>
+    </plurals>
 </resources>
